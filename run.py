@@ -1,7 +1,3 @@
-# Your code goes here.
-# You can delete these comments, but do not change the name of this file
-# Write your code to expect a terminal of 80 characters wide and 24 rows high
-
 import gspread
 from google.oauth2.service_account import Credentials
 from pprint import pprint
@@ -31,7 +27,6 @@ def get_sales_data():
         print('Example: 10, 20, 30, 40, 50, 60\n')
 
         data_str = input('Enter your data here: ')
-        
         sales_data = data_str.split(',')
 
         if validate_data(sales_data):
@@ -86,8 +81,18 @@ def calculate_surplus_data(sales_row):
     for stock, sales in zip(stock_row, sales_row):
         surplus = int(stock) - sales
         surplus_data.append(surplus)
-    
+
     return surplus_data
+
+
+def update_surplus_worksheet(data):
+    """
+    Update surplus worksheets, add new row with the list data provides
+    """
+    print('Updating surplus worksheets...\n')
+    surplus_worksheet = SHEET.worksheet('surplus')
+    surplus_worksheet.append_row(data)
+    print('Surplus worksheet updated successfully.\n')
 
 
 def main():
@@ -98,7 +103,7 @@ def main():
     sales_data = [int(num) for num in data]
     update_sales_worksheet(sales_data)
     new_surplus_data = calculate_surplus_data(sales_data)
-    print(new_surplus_data)
+    update_surplus_worksheet(new_surplus_data)
 
 
 print('Welcome to Love Sandwiches Data Automation')
